@@ -15,4 +15,4 @@
 
 See [ancestry/](ancestry/) for details.
 
-
+Selected sites can be found in [ancestry/output/panel-sites/](ancestry/output/panel-sites/).
