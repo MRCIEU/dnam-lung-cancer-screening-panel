@@ -6,23 +6,19 @@ For each ancestry, associated genetic variants that are also mQTLs (http://mqtld
 will be ordered by mQTL effect size
 and the top 50 selected for the panel.
 
-## Download GoDMC
-
-http://mqtldb.godmc.org.uk/downloads
-
-Save to the `godmc/` folder.
-
-[Convert to hg38 coordinates]
-
 ## Create phenotype files for GWAS
 
-Input: http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/integrated_call_samples_v3.20130502.ALL.panel
-Output: `output/pheno/*.txt`
+* Input: http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/integrated_call_samples_v3.20130502.ALL.panel
+* Output: GWAS phenotype files for each ancestry in `output/pheno/`
+
 ```
 Rscript src/generate-phenotype-files.r output/pheno
 ```
 
 ## Perform GWAS for each ancestry
+
+* Input: `output/pheno/*.txt`, 1000 Genomes data http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/
+* Output: GWAS outputs for each ancestry in `gwas-fst/` and `gwas-glm/` 
 
 On the compute cluster:
 1. create a folder for the scripts, inputs and outputs (in scratch space), call it `BASE`
@@ -39,13 +35,23 @@ sbatch src/gwas-fst.sh
 When finished, copy the `gwas-fst` and `gwas-glm` output folders
 to the `output` folder for panel selection in the next step.
 
+## Download GoDMC
+
+* Input: http://mqtldb.godmc.org.uk/downloads
+* Output: GoDMC summary statistics with coordinates converted to hg38 (`godmc-hg38.txt`)
+
+[Missing: Conversion to hg38 coordinates]
+
 ## Select top ancestry mQTLs
+
+* Input: `output/pheno`, `output/gwas-fst/`, `output/gwas-glm`, `godmc-hg38.txt`
+* Output: Up to 50 DNAm sites associated with each ancestry in `output/panel-sites`
 
 ```
 Rscript src/select-sites.r \
   output/pheno \
   output/gwas-glm \
   output/gwas-fst \
-  godmc/godmc-hg38.txt \
+  godmc-hg38.txt \
   output/panel-sites
 ```
