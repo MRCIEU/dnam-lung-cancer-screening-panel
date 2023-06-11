@@ -20,7 +20,7 @@ source("src/load-gwas-function.r")
 ## ------------------------------
 ## load data
 
-ancestries <- list.files(pheno.dir, pattern="^[A-Z]+.txt$"
+ancestries <- list.files(pheno.dir, pattern="^[A-Z]+.txt$")
 ancestries <- sub(".txt", "", ancestries)
 
 ## mQTL summary statistics (GoDMC)
