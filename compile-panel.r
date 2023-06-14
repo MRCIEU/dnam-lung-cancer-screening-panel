@@ -15,7 +15,7 @@ sources <- c(
     "prostate-cancer",
     "prostate-cancer-t-cells",
     "smoking-cessation",
-    "smoking-current-vs-former",
+    "smoking-former",
     "smoking-status")
 
 files <- file.path(sources, "regions.csv")
