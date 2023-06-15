@@ -1,4 +1,4 @@
-﻿details,chr,start,end,position,number of cpgs,length,gene
-Colorectal cancer,chr17,75368814,75369020,chr17:75368814-75369020,17CpGs,206,SEPT9
-Colorectal cancer,chr17,75369420,75369648,chr17:75369420-75369648,26CpGs,228,SEPT9
-Colorectal cancer,chr17,75370258,75370549,chr17:75370258-75370549,19CpGs,291,SEPT9
+"details","chr","start","end","position","number.of.cpgs","length","gene"
+"Wasserkort SEPT9 colorectal DNAm","chr17",75368814,75369020,"chr17:75368814-75369020","17CpGs",206,"SEPT9"
+"Wasserkort SEPT9 colorectal DNAm","chr17",75369420,75369648,"chr17:75369420-75369648","26CpGs",228,"SEPT9"
+"Wasserkort SEPT9 colorectal DNAm","chr17",75370258,75370549,"chr17:75370258-75370549","19CpGs",291,"SEPT9"
