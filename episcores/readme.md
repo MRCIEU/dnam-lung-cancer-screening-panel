@@ -8,6 +8,8 @@ In Robins et al. 2023 (https://doi.org/10.1038%2Fs41467-023-37979-8), authors pr
 * IGFBP-1 - 120 CpGs
 * MMP12 - 257 CpGs
 * HGF - 72 CpGs
+
+
 The following proteins did not have EpiScores present in Gadd et al.:
 * ALPP
 * SFTPA1
