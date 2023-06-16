@@ -1,7 +1,8 @@
 ## Episcores of proteins associated with imminent lung cancer diagnosis
+
 In Robins et al. 2023 (https://doi.org/10.1038%2Fs41467-023-37979-8), authors present a blood proteome of imminent lung cancer diagnosis, where 36 proteins measured by the Olink Proteomics platform were associated with lung cancer diagnosis (shown in Figure 1 in their paper). Using Gadd et al. 2022 (https://doi.org/10.7554/eLife.71802), we used Supplementary Table 1E [gadd_supplement](sources/gadd_supplement.xlsx) to perform a lookup of EpiScores for each of the 36 Robins et al. proteins. Below are numbers of CpGs extracted for each protein which had an EpiScore:
 * OSM - 125 CpGs
-* EN-RAGE - 82 CpGs
+* EN-RAGE (S100A12) - 82 CpGs
 * CXCL9 - 56 CpGs
 * VEGFA - 159 CpGs
 * TGF-alpha - 100 CpGs
