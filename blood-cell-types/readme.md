@@ -18,5 +18,5 @@ https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9811898/bin/41586_2022_5580_MOESM5_
 - Blood-NK.4CpGs.U85.f85.bed
 - Blood-T.4CpGs.U85.f85.bed
 
-*Note that coordinates are given for the hg19 genome assembly.*
+*Note that coordinates refer to the hg19 genome assembly.*
 
