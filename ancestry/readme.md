@@ -17,7 +17,7 @@ Rscript src/generate-phenotype-files.r output/pheno
 
 ## Perform GWAS for each ancestry
 
-* Input: `output/pheno/*.txt`, 1000 Genomes data http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/
+* Input: `output/pheno/*.txt`, 1000 Genomes data
 * Output: GWAS outputs for each ancestry in `gwas-fst/` and `gwas-glm/` 
 
 On the compute cluster:
@@ -25,7 +25,7 @@ On the compute cluster:
 2. copy `output/pheno` folder to `BASE`
 3. copy `src/gwas-*.sh` scripts to `BASE`
 4. set `BASE_DIR` in the scripts to the value of `BASE`
-5. download 1000 Genomes data (http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/) to `BASE/1000G`
+5. download 1000 Genomes data (http://hgdownload.cse.ucsc.edu/gbdb/hg38/1000Genomes/) to `BASE/1000G`
 6. submit the GWAS jobs to the system as follows:
 ```
 sbatch src/gwas-glm.sh
@@ -38,9 +38,7 @@ to the `output` folder for panel selection in the next step.
 ## Download GoDMC
 
 * Input: http://mqtldb.godmc.org.uk/downloads
-* Output: GoDMC summary statistics with coordinates converted to hg38 (`godmc-hg38.txt`)
-
-[Missing: Conversion to hg38 coordinates]
+* Output: GoDMC summary statistics with hg38 coordinates (`godmc-hg38.txt`)
 
 ## Select top ancestry mQTLs
 

@@ -82,7 +82,25 @@ for (ancestry in ancestries) {
     ## percentiles of mQTL effects among top 50 sites
     cat("... corresponding percentiles =", quantile(ecdf(abs(godmc$beta))(abs(top.pairs$beta.godmc))), "\n")
 }
-    
+
+
+cols <- c("chr","pos","id","obs.ct","hudson.fst","coords","z.glm","p.glm","beta.godmc","cpg.godmc","pct.godmc","is.top50")
+
+panel.sites <- lapply(ancestries, function(ancestry) {
+    filename <- file.path(output.dir, paste0(ancestry, ".csv"))
+    sites <- fread(filename)
+    stopifnot(sum(sites$is.top50,na.rm=T)>0)
+    sites <- sites[sites$is.top50,]
+    stopifnot(length(cols) == ncol(sites))
+    colnames(sites) <- cols
+    sites$start <- sites$end <- sites$pos
+    sites$cpg <- sites$cpg.godmc
+    sites$ancestry <- ancestry
+    sites
+})
+panel.sites <- do.call(rbind, panel.sites)
+
+fwrite(panel.sites, file=file.path(output.dir, "panel-sites.csv"))
 
 
 
