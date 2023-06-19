@@ -3,7 +3,7 @@ library(data.table)
 load.gwas <- function(path, ancestry, model=c("glm","fst")) {
   files <- list.files(
       path,
-      pattern=paste0(ancestry, "-.*", model),
+      pattern=paste0(ancestry, "[^A-Z]+.*", model),
       full.names=T)
   stopifnot(length(files)>0)
   dat <- do.call(rbind, lapply(files, fread))

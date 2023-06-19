@@ -2,7 +2,11 @@
 args = commandArgs(trailingOnly=TRUE)
 
 library(data.table)
-
+args <-   c("output/pheno",
+  "output/gwas-glm",
+  "output/gwas-fst",
+  "godmc-hg38.csv.gz",
+  "output/panel-sites")
 #' For each ancestry, identify the top 50 SNPs
 #' in terms of meQTL effect such that
 #' the GWAS Fst > 95th percentile of meQTLs
@@ -29,6 +33,8 @@ godmc.pct <- ecdf(abs(godmc$beta))
 godmc$beta.pct <- godmc.pct(abs(godmc$beta))
 
 for (ancestry in ancestries) {
+    cat("----------------------------------------\n")
+    cat(date(), ancestry, "\n")
 
     ## summary stats for GWAS (Fst)
     dat <- load.gwas(fst.dir, ancestry, "fst")
@@ -57,9 +63,7 @@ for (ancestry in ancestries) {
     fwrite(top.pairs, file=file.path(output.dir, paste0(ancestry, ".csv")))
     
     ## output results
-    cat("----------------------------------------\n")
-    cat(ancestry, "\n")
-    
+
     ## correlation between logistic z-score and Fst
     cat("cor(z.glm,fst) =", with(dat, cor(abs(z.glm), HUDSON_FST, use="pairwise.complete")), "\n")
     
