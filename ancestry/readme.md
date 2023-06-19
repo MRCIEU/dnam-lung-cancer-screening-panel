@@ -37,12 +37,19 @@ to the `output` folder for panel selection in the next step.
 
 ## Download GoDMC
 
-* Input: http://mqtldb.godmc.org.uk/downloads
-* Output: GoDMC summary statistics with hg38 coordinates (`godmc-hg38.txt`)
+* Input:
+  - mQTL summary statistics from GoDMC http://fileserve.mrcieu.ac.uk/mqtl/assoc_meta_all.csv.gz
+  - mapping between rsid and genomic coordinates ftp://hgdownload.soe.ucsc.edu/goldenPath/hg19/database/snp151Common.txt.gz
+
+* Output: GoDMC summary statistics with hg38 coordinates (`godmc-hg38.csv.gz`)
+
+```
+Rscript extract-mqtls.r godmc-hg38.csv.gz
+```
 
 ## Select top ancestry mQTLs
 
-* Input: `output/pheno`, `output/gwas-fst/`, `output/gwas-glm`, `godmc-hg38.txt`
+* Input: `output/pheno`, `output/gwas-fst/`, `output/gwas-glm`, `godmc-hg38.csv.gz`
 * Output: Up to 50 DNAm sites associated with each ancestry in `output/panel-sites`
 
 ```
@@ -50,6 +57,6 @@ Rscript src/select-sites.r \
   output/pheno \
   output/gwas-glm \
   output/gwas-fst \
-  godmc-hg38.txt \
+  godmc-hg38.csv.gz \
   output/panel-sites
 ```
