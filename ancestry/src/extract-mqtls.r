@@ -3,7 +3,7 @@ args = commandArgs(trailingOnly=TRUE)
 
 output.filename <- args[1]
 
-library(MungeSumstats)
+library(MungeSumstats) ## BiocManager::install("MungeSumstats")
 library(data.table)
 
 godmc.url <- "http://fileserve.mrcieu.ac.uk/mqtl/assoc_meta_all.csv.gz"
@@ -52,7 +52,7 @@ if (!file.exists(lookup.filename)) {
     nrow(lookup) ## 95686
     fwrite(lookup,file=lookup.filename)
 } else {
-    fread(lookup.filename)
+    lookup <- fread(lookup.filename)
 }
 
 ## add rsid for each mqtl

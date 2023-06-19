@@ -44,7 +44,7 @@ to the `output` folder for panel selection in the next step.
 * Output: GoDMC summary statistics with hg38 coordinates (`godmc-hg38.csv.gz`)
 
 ```
-Rscript extract-mqtls.r godmc-hg38.csv.gz
+Rscript src/extract-mqtls.r godmc-hg38.csv.gz
 ```
 
 ## Select top ancestry mQTLs

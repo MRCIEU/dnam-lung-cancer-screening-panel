@@ -9,7 +9,7 @@ library(data.table)
 pheno <- fread(pheno.url, select = 1:2)
 colnames(pheno) <- c("IID", "phenotype")
 
-for (ancestry in unique(pheno$pop)) {
+for (ancestry in unique(pheno$phenotype)) {
   design <- pheno
   design$phenotype <- sign(design$phenotype == ancestry)
   write.table(
