@@ -4,7 +4,7 @@ load.illumina.manifest <- function(path) {
     filename.gz <- paste0(filename, ".gz")
     if (!file.exists(filename.gz)) {
         download.file(url, destfile=filename)
-        system("gzip", filename)
+        system(paste("gzip", filename))
     }
     manifest.450k <- fread(filename.gz, skip=7,fill=TRUE)
     manifest.450k <- as.data.frame(manifest.450k)

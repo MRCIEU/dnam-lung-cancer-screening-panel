@@ -147,7 +147,7 @@ nrow(panel)
 ## 3880
 
 nrow(panel.reduced)
-## 2754
+## 2791
 
 quantile(panel$end-panel$start)
 ##  0%  25%  50%  75% 100% 
@@ -162,32 +162,29 @@ quantile(setdiff(panel.reduced$end-panel.reduced$start,0))
 ##  23.00  174.25  281.50  417.50 1457.00 
 
 table(sapply(mapping,length))
-##  1    2    3    4    5    6    7    8    9   10   11   12   13   14   16 
-##2258  253  106   54   33   16    8    8    4    5    2    2    3    1    1
+##   1    2    3    4    5    6    7    8    9   10   11   12   14 
+##2285  264  101   52   47   12   18    4    2    1    1    2    2 
 
 panel.reduced$source[which(sapply(mapping,length) > 10)]
-## [1] "ancestry" 
-## [2] "ancestry" 
-## [3] "ancestry" 
-## [4] "bmi/cadmium/cotinine/educational-attainment/episcores/lung-cancer/smoking-cessation/smoking-status"
-## [5] "ancestry" 
-## [6] "ancestry" 
-## [7] "ancestry" 
-## [8] "ancestry" 
-## [9] "ancestry"
+#[1] "ancestry"                                                                                          
+#[2] "ancestry"                                                                                          
+#[3] "bmi/cadmium/cotinine/educational-attainment/episcores/lung-cancer/smoking-cessation/smoking-status"
+#[4] "ancestry"                                                                                          
+#[5] "ancestry"                                                                                          
 ## (indicates that some CpG sites are being used for multiple ancestries)
 
 table(sapply(strsplit(panel.reduced$source, "/"), length))
 ##   1    2    3    4    5    6    7    8 
-##2657   77   11    3    2    1    1    2 
+##2696   74   12    3    2    1    1    2 
 
 panel.reduced[which(sapply(strsplit(panel.reduced$source, "/"),length) > 5),"source"]
 ## [1] "cadmium/cotinine/dunedin-pace/educational-attainment/episcores/lung-cancer/smoking-cessation/smoking-status"
 ## [2] "cadmium/cotinine/educational-attainment/episcores/lung-cancer/smoking-cessation/smoking-status"             
 ## [3] "bmi/cadmium/cotinine/educational-attainment/episcores/lung-cancer/smoking-cessation/smoking-status"         
-## [4] "cadmium/cotinine/episcores/lung-cancer/smoking-cessation/smoking-status"
+## [4] "cadmium/cotinine/episcores/lung-cancer/smoking-cessation/smoking-status"                                    
 
 table(sapply(strsplit(panel.reduced$details, "/"), length))
 ##   1 
-##2754 
+##2791
+
 
