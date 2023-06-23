@@ -31,27 +31,26 @@ within the *same* super-population.
 On the compute cluster:
 1. create a folder for the scripts, inputs and outputs (in scratch space),
     call it `BASE`
-2. copy `src/generate-phenotype-files.r` to `BASE`
+2. copy `ancestry/src/` to `BASE`
 3. generate GWAS phenotype files as follows:
 
 ```
-Rscript generate-phenotype-files.r pheno
+Rscript src/generate-phenotype-files.r pheno
 ```
 
 ## Perform GWAS for each ancestry
 
-* Input: `output/pheno/*.txt`, 1000 Genomes data
+* Input: `pheno/`, 1000 Genomes data
 * Output: GWAS outputs for each ancestry in `gwas-fst/` and `gwas-glm/` 
 
 On the compute cluster:
-2. copy `src/gwas-*.sh` scripts to `BASE`
-3. copy `ancestries.txt` to `BASE`
-4. download 1000 Genomes data (http://hgdownload.cse.ucsc.edu/gbdb/hg38/1000Genomes/) to `BASE/1000G`
-5. submit the GWAS jobs to the system as follows:
+1. copy `ancestry/ancestries.txt` to `BASE`
+2. download 1000 Genomes data (http://hgdownload.cse.ucsc.edu/gbdb/hg38/1000Genomes/) to `BASE/1000G`
+3. submit the GWAS jobs to the system as follows:
 
 ```
-sbatch gwas-glm.sh
-sbatch gwas-fst.sh
+sbatch src/gwas-glm.sh
+sbatch src/gwas-fst.sh
 ```
 
 ## Select top ancestry mQTLs
@@ -60,17 +59,17 @@ sbatch gwas-fst.sh
 * Output: Up to 50 DNAm sites associated with each ancestry in `sites/sites.csv`.
 
 On the compute cluster:
-1. copy `godmc-hg38.csv.gz`, `src/filter-sites.sh` and `src/select-sites.r` to `BASE`
+1. copy `godmc-hg38.csv.gz` to `BASE`
 2. submit the jobs to cluster as follows:
 
 ```
-sbatch filter-sites.sh
+sbatch src/filter-sites.sh
 ```
 
 Afterward, collate the top 50 for each ancestry into a single file:
 
 ```
-Rscript select-sites.r sites sites/sites.csv
+Rscript src/select-sites.r sites sites/sites.csv
 ```
 
 ## Check ancestry mQTLs
@@ -83,16 +82,10 @@ capture genetic variation of ancestry.
 * Input: `sites/sites.csv`, 1000 Genomes data
 * Output: Genotype vcf files in `genotypes/` for each mQTL in `sites.csv`
 
-1. create a file `snps.txt` containing the mQTL genomic coordinates
-```r
-panel.sites <- fread("sites/sites.csv")
-fwrite(unique(panel.sites[,c("chr","pos")]),
-       file="snps.txt", sep="\t",col.names=F)
-```
-2. copy `src/extract-genotypes.sh` scripts to `BASE`
-3. submit the jobs to extract genotypes to the system as follows:
+Submit the jobs to extract genotypes to the system as follows:
 
 ```
+Rscript src/extract-sites.r sites/sites.csv sites.txt
 sbatch extract-genotypes.sh
 ```
 
