@@ -6,7 +6,7 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=1
-#SBATCH --time=0:30:00
+#SBATCH --time=0:60:00
 #SBATCH --mem=16G
 #SBATCH --array=0-681
   ## 31 ancestries
