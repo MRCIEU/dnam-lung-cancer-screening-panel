@@ -32,8 +32,8 @@ On the compute cluster:
 6. submit the GWAS jobs to the system as follows:
 
 ```
-sbatch src/gwas-glm.sh
-sbatch src/gwas-fst.sh
+sbatch gwas-glm.sh
+sbatch gwas-fst.sh
 ```
 
 When finished, copy the `gwas-fst` and `gwas-glm` output folders
