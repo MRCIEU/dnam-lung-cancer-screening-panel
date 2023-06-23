@@ -63,7 +63,7 @@ On the compute cluster:
 2. submit the jobs to cluster as follows:
 
 ```
-sbatch src/filter-sites.sh
+sbatch src/filter-sites.sh gwas-glm gwas-fst godmc-hg38.csv.gz sites
 ```
 
 Afterward, collate the top 50 for each ancestry into a single file:
