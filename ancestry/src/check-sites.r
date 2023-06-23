@@ -5,7 +5,7 @@ library(data.table)
 library(vcfR)
 library(ggfortify)
 
-panel.filename <- args[1]
+sites.filename <- args[1]
 genotypes.dir <- args[2]
 plot.filename <- args[3]
 
@@ -31,12 +31,12 @@ pheno <- fread(pheno.url, select = 1:3)
 pheno <- as.data.frame(pheno)
 pheno <- pheno[pheno$sample %in% colnames(genotypes),]
 
-panel.sites <- fread(file=panel.filename)
-stopifnot(all(panel.sites$coords %in% rownames(genotypes)))
+sites <- fread(file=sites.filename)
+stopifnot(all(sites$coords %in% rownames(genotypes)))
 
 common.samples <- intersect(colnames(genotypes), pheno$sample)
 
-genotypes <- genotypes[match(panel.sites$coords, rownames(genotypes)),
+genotypes <- genotypes[match(sites$coords, rownames(genotypes)),
                        match(common.samples, colnames(genotypes))]
 
 pheno <- pheno[match(common.samples, pheno$sample),]
