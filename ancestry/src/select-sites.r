@@ -2,11 +2,6 @@
 args = commandArgs(trailingOnly=TRUE)
 
 library(data.table)
-args <-   c("output/pheno",
-  "output/gwas-glm",
-  "output/gwas-fst",
-  "godmc-hg38.csv.gz",
-  "output/panel-sites")
 #' For each ancestry, identify the top 50 SNPs
 #' in terms of meQTL effect such that
 #' the GWAS Fst > 97.5th percentile of meQTLs
@@ -14,18 +9,19 @@ args <-   c("output/pheno",
 #'
 #' (about 5 minutes per ancestry, total is 2-2.5 hours runtime)
 
-pheno.dir <- args[1]
-glm.dir <- args[2]
-fst.dir <- args[3]
-godmc.file <- args[4]
-dir.create(output.dir <- args[5])
+glm.dir <- args[1]
+fst.dir <- args[2]
+godmc.file <- args[3]
+dir.create(output.dir <- args[4])
 
 source("src/load-gwas-function.r")
 ## ------------------------------
 ## load data
 
-ancestries <- list.files(pheno.dir, pattern="^[A-Z]+.txt$")
-ancestries <- sub(".txt", "", ancestries)
+pheno.url <- "http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/integrated_call_samples_v3.20130502.ALL.panel"
+pheno <- fread(pheno.url, select = 1:3)
+pheno <- as.data.frame(pheno)
+ancestries <- unique(pheno$pop)
 
 ## mQTL summary statistics (GoDMC)
 godmc <- fread(godmc.file)
@@ -87,6 +83,13 @@ for (ancestry in ancestries) {
     cat("... corresponding percentiles =", quantile(ecdf(abs(godmc$beta))(abs(top.pairs$beta.godmc))), "\n")
 }
 
+
+for (filename in file.path("output/panel-sites", paste0(ancestries, ".csv"))) {
+    x <- fread(filename)
+    x[["#CHROM"]] <- paste0("chr",x[["#CHROM"]])
+    x$coords <- paste0("chr",x$coords)
+    fwrite(x, file=filename)
+}
 
 cols <- c("chr","pos","id","obs.ct","hudson.fst","coords","z.glm","p.glm","beta.godmc","cpg.godmc","pct.godmc","is.top50")
 
