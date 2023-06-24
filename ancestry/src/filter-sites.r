@@ -16,7 +16,7 @@ dir.create(output.dir <- args[5])
 load.gwas <- function(path, ancestry, model=c("glm","fst")) {
   files <- list.files(
       path,
-      pattern=paste0(ancestry, "[^A-Z]+.*", model),
+      pattern=paste0(ancestry, "-chr[0-9]+[.]+.+", model),
       full.names=T)
   stopifnot(length(files)>0)
   dat <- do.call(rbind, lapply(files, fread))
@@ -51,7 +51,7 @@ dat$cpg.godmc <- godmc$cpg[idx]
 dat$pct.godmc <- godmc$beta.pct[idx]
 
 ## top 200 hudson fst with logistic p < 5e-8
-iseligible <- dat$p.glm < 5e-8 & !is.na(dat$beta.glm)
+iseligible <- dat$p.glm < 5e-8 & !is.na(dat$beta.godmc)
 if (sum(iseligible) >= 200)
     threshold <- sort(dat$HUDSON_FST[iseligible],decreasing=T)[200]
 else
