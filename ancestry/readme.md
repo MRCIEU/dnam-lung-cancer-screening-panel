@@ -58,7 +58,8 @@ sbatch src/gwas-fst.sh ancestries.txt 1000G pheno gwas-fst
 ## Select top ancestry mQTLs
 
 * Input: `gwas-fst/`, `gwas-glm/`, `godmc-hg38.csv.gz`, `ancestries.txt`
-* Output: Up to 50 DNAm sites associated with each ancestry in `sites.csv`.
+* Output: mQTLs associated with each ancestry in `sites.csv` (at
+  logistic p < 5e-8)
 
 On the compute cluster:
 1. copy `godmc-hg38.csv.gz` to `BASE`

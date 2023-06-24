@@ -2,10 +2,9 @@
 args = commandArgs(trailingOnly=TRUE)
 
 library(data.table)
-#' For each ancestry, identify top SNPs for which
-#' 1. logistic GWAS p < 5e-8
-#' 2. among those, top 200 in fst GWAS
-#' 3. among those, top 50 GoDMC mQTL effect 
+#' For each ancestry, identify top SNPs
+#' that are mQTLs and for which
+#' logistic GWAS p < 5e-8
 
 ancestry <- args[1]
 glm.dir <- args[2]
@@ -70,13 +69,6 @@ dat <- lapply(1:length(fst.files), function(i) {
 })
 
 dat <- do.call(rbind, dat)
-
-## keep the top 200 by FST
-if (nrow(dat) > 200)
-    dat <- dat[order(dat$HUDSON_FST,decreasing=T)[1:200],]
-
-## sort by mQTL effect
-dat <- dat[order(abs(dat$beta.godmc),decreasing=T),]
 
 filename <- file.path(output.dir, paste0(ancestry, ".csv"))
 

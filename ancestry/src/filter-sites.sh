@@ -19,4 +19,4 @@ cd $SLURM_SUBMIT_DIR
 
 module load languages/r/4.2.1
 
-Rscript src/filter-sites.r $ANCESTRY $2 $3 $4 $5 $6
+Rscript src/filter-sites.r $ANCESTRY $2 $3 $4 $5
