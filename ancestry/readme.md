@@ -49,6 +49,8 @@ On the compute cluster:
 3. submit the GWAS jobs to the system as follows:
 
 ```
+mkdir gwas-glm
+mkdir gwas-fst
 sbatch src/gwas-glm.sh ancestries.txt 1000G pheno gwas-glm
 sbatch src/gwas-fst.sh ancestries.txt 1000G pheno gwas-fst
 ```

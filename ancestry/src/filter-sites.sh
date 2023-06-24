@@ -7,9 +7,9 @@
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=1
 #SBATCH --time=00:60:00
-#SBATCH --mem=64G
-#SBATCH --array=0-1
-  ## 0-30 31 ancestries
+#SBATCH --mem=16G
+#SBATCH --array=0-30
+  ## 31 ancestries
 
 readarray -t ANCESTRIES < $1
 

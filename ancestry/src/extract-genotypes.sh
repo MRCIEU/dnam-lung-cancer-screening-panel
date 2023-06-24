@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#SBATCH --job-name=extract-snps
+#SBATCH --job-name=extract-genotypes
 #SBATCH --account=sscm009461
 #SBATCH --partition=mrcieu
 #SBATCH --nodes=1

@@ -15,52 +15,70 @@ dir.create(output.dir <- args[5])
 
 cat("filter-sites.r", ancestry, glm.dir, fst.dir, godmc.file, output.dir, "\n")
 
-load.gwas <- function(path, ancestry, model=c("glm","fst")) {
-  files <- list.files(
-      path,
-      pattern=paste0(ancestry, "-chr[0-9]+[.]+.+", model),
-      full.names=T)
-  stopifnot(length(files)>0)
-  dat <- do.call(rbind, lapply(files, fread))
-  dat$coords <- paste(dat[["#CHROM"]], dat[["POS"]], sep="_")
-  dat <- dat[order(dat[["#CHROM"]], as.integer(dat[["POS"]])),]
-  dat
-}
-
 ## mQTL summary statistics (GoDMC)
 godmc <- fread(godmc.file)
 godmc.pct <- ecdf(abs(godmc$beta))
 godmc$beta.pct <- godmc.pct(abs(godmc$beta))
 
-filename <- file.path(output.dir, paste0(ancestry, ".csv"))
+## GWAS output files
+fst.files <- list.files(
+    fst.dir,
+    pattern=paste0(ancestry, "-chr[0-9]+.*.fst.var$"),
+    full.names=T)
+
+glm.files <- list.files(
+    glm.dir,
+    pattern=paste0(ancestry, "-chr[0-9]+.*.glm.logistic$"),
+    full.names=T)
+
+fst.files <- sort(fst.files)
+glm.files <- sort(glm.files)
+
+stopifnot(length(fst.files) == length(glm.files))
+
+load.gwas <- function(filename) {
+    cat(date(), "loading", filename, "...\n")
+    dat <- as.data.frame(fread(filename))
+    dat$coords <- paste(dat[["#CHROM"]], dat[["POS"]], sep="_")
+    dat <- dat[order(dat[["#CHROM"]], as.integer(dat[["POS"]])),]
+    dat
+}
+
+dat <- lapply(1:length(fst.files), function(i) {
+    ## summary stats for GWAS (Fst)
+    dat <- load.gwas(fst.files[i])
     
-## summary stats for GWAS (Fst)
-dat <- load.gwas(fst.dir, ancestry, "fst")
-dat$pct.fst <- ecdf(dat$HUDSON_FST)(dat$HUDSON_FST)
+    ## summary stats for GWAS (logistic regression)
+    dat.glm <- load.gwas(glm.files[i])
 
-## summary stats for GWAS (logistic regression)
-dat.glm <- load.gwas(glm.dir, ancestry, "glm")
+    ## add logistic GWAS summary statistics 
+    stopifnot(identical(dat$coords, dat.glm$coords))
+    dat$z.glm <- dat.glm$Z_STAT
+    dat$p.glm <- dat.glm$P
 
-## add logistic GWAS summary statistics 
-stopifnot(identical(dat$coords, dat.glm$coords))
-dat$z.glm <- dat.glm$Z_STAT
-dat$p.glm <- dat.glm$P
+    ## keep only with logistic p < 5e-8
+    dat <- dat[which(dat$p.glm < 5e-8),]
 
-## add mQTL statistics
-idx <- match(dat$coords, godmc$coords)
-dat$beta.godmc <- godmc$beta[idx]
-dat$cpg.godmc <- godmc$cpg[idx]
-dat$pct.godmc <- godmc$beta.pct[idx]
+    ## add mQTL statistics
+    idx <- match(dat$coords, godmc$coords)
+    dat$beta.godmc <- godmc$beta[idx]
+    dat$cpg.godmc <- godmc$cpg[idx]
+    dat$pct.godmc <- godmc$beta.pct[idx]
 
-## top 200 hudson fst with logistic p < 5e-8
-iseligible <- dat$p.glm < 5e-8 & !is.na(dat$beta.godmc)
-if (sum(iseligible) >= 200)
-    threshold <- sort(dat$HUDSON_FST[iseligible],decreasing=T)[200]
-else
-    threshold <- min(dat$HUDSON_FST[iseligible],na.rm=T)
-dat <- dat[iseligible & dat$HUDSON_FST >= threshold,]
+    ## keep only that are also mqtls
+    dat[!is.na(dat$beta.godmc),]
+})
 
+dat <- do.call(rbind, dat)
+
+## keep the top 200 by FST
+if (nrow(dat) > 200)
+    dat <- dat[order(dat$HUDSON_FST,decreasing=T)[1:200],]
+
+## sort by mQTL effect
 dat <- dat[order(abs(dat$beta.godmc),decreasing=T),]
+
+filename <- file.path(output.dir, paste0(ancestry, ".csv"))
 
 fwrite(dat, file=filename)
 
