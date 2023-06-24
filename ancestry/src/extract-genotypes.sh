@@ -12,14 +12,17 @@
 
 CHR=chr$((SLURM_ARRAY_TASK_ID))
 
+SITES_FILENAME=$1
+GENO_DIR=$2
+OUTPUT_DIR=$3
+
 cd $SLURM_SUBMIT_DIR
 
-GENO_DIR=1000G
 CHR_FILE=$GENO_DIR/ALL.$CHR.shapeit2_integrated_v1a.GRCh38.20181129.phased.vcf.gz
 
-OUTPUT=genotypes-$CHR.vcf.gz
+OUTPUT=$OUTPUT_DIR/genotypes-$CHR.vcf.gz
 
 module load libs/bcftools/1.8
 
-srun bcftools view -v snps -T sites.txt $CHR_FILE | gzip -c > $OUTPUT
+srun bcftools view -v snps -T $SITES_FILENAME $CHR_FILE | gzip -c > $OUTPUT
 

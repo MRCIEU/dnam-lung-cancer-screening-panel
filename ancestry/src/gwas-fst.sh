@@ -16,7 +16,12 @@
 ANC_NUM=$((SLURM_ARRAY_TASK_ID / 22))
 CHR_NUM=$((SLURM_ARRAY_TASK_ID % 22))
 
-readarray -t ANCESTRIES < ancestries.txt
+ANCESTRIES_FILE=$1
+GENO_DIR=$2
+PHENO_DIR=$3
+OUTPUT_DIR=$4
+
+readarray -t ANCESTRIES < $ANCESTRIES_FILE
 
 ANCESTRY=${ANCESTRIES[$ANC_NUM]}
 
@@ -24,13 +29,11 @@ CHR=chr$((CHR_NUM+1))
 
 cd $SLURM_SUBMIT_DIR
 
-GENO_DIR=1000G
 CHR_FILE=$GENO_DIR/ALL.$CHR.shapeit2_integrated_v1a.GRCh38.20181129.phased.vcf.gz
 
-PHENO_DIR=pheno
 PHENO_FILE=$PHENO_DIR/$ANCESTRY.txt
 
-OUTPUT=gwas-fst/$ANCESTRY-$CHR
+OUTPUT=$OUTPUT_DIR/$ANCESTRY-$CHR
 
 ## bc4 plink2 installation did not support the 'fst' option 
 ## used local version obtained from the plink2 website

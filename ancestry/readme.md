@@ -40,7 +40,7 @@ Rscript src/generate-phenotype-files.r pheno
 
 ## Perform GWAS for each ancestry
 
-* Input: `pheno/`, 1000 Genomes data
+* Input: `ancestries.txt`, `pheno/`, 1000 Genomes data
 * Output: GWAS outputs for each ancestry in `gwas-fst/` and `gwas-glm/` 
 
 On the compute cluster:
@@ -49,8 +49,8 @@ On the compute cluster:
 3. submit the GWAS jobs to the system as follows:
 
 ```
-sbatch src/gwas-glm.sh
-sbatch src/gwas-fst.sh
+sbatch src/gwas-glm.sh ancestries.txt 1000G pheno gwas-glm
+sbatch src/gwas-fst.sh ancestries.txt 1000G pheno gwas-fst
 ```
 
 ## Select top ancestry mQTLs
@@ -86,7 +86,7 @@ Submit the jobs to extract genotypes to the system as follows:
 
 ```
 Rscript src/extract-sites.r sites.csv sites.txt
-sbatch extract-genotypes.sh
+sbatch extract-genotypes.sh sites.txt 1000G genotypes
 ```
 
 ### Compare genetic clusters to ancestry
