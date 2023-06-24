@@ -13,6 +13,8 @@ fst.dir <- args[3]
 godmc.file <- args[4]
 dir.create(output.dir <- args[5])
 
+cat("filter-sites.r", ancestry, glm.dir, fst.dir, godmc.file, output.dir, "\n")
+
 load.gwas <- function(path, ancestry, model=c("glm","fst")) {
   files <- list.files(
       path,
