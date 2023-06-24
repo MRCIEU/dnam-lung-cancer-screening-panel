@@ -18,7 +18,7 @@ if (!file.exists(godmc.filename)) {
     unlink(tmp.filename)
     mqtls <- mqtls[mqtls$clumped == T,]
     mqtls$CHR <- gsub(pattern = ":.*", "", mqtls$snp)
-    #mqtls$CHR <- sub("chr", "", mqtls$CHR)
+    mqtls$CHR <- sub("chr", "", mqtls$CHR)
     mqtls$BP <- gsub(pattern = "*:SNP", "", mqtls$snp)
     mqtls$BP <- gsub(".*:", "", mqtls$BP)
     mqtls$BP <- as.numeric(mqtls$BP)
@@ -46,7 +46,7 @@ if (!file.exists(lookup.filename)) {
     nrow(lookup) ## 14831956
     lookup <- lookup[grepl("by-1000genomes",lookup$valid),]
     nrow(lookup) ## 14676828
-    #lookup$chr <- sub("chr", "", lookup$chr)    
+    lookup$chr <- sub("chr", "", lookup$chr)    
     lookup$coords <- paste(lookup$chr,lookup$end,sep="_")
     mean(mqtls$coords %in% lookup$coords) ## 0.9613433
     lookup <- lookup[lookup$coords %in% mqtls$coords,]

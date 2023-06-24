@@ -6,6 +6,7 @@ output.filename <- args[2]
 
 library(data.table)
 
-panel.sites <- fread(input.filename)
-fwrite(unique(panel.sites[,c("chr","pos")]),
+sites <- fread(input.filename)
+sites$chr <- paste0("chr",sites$chr)
+fwrite(unique(sites[,c("chr","pos")]),
        file=output.filename, sep="\t",col.names=F)

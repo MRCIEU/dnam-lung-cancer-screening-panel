@@ -89,7 +89,8 @@ Submit the jobs to extract genotypes to the system as follows:
 
 ```
 Rscript src/extract-sites.r sites.csv sites.txt
-sbatch extract-genotypes.sh sites.txt 1000G genotypes
+mkdir genotypes
+sbatch src/extract-genotypes.sh sites.txt 1000G genotypes
 ```
 
 ### Compare genetic clusters to ancestry
