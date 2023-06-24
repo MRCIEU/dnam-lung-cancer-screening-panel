@@ -11,10 +11,12 @@
 #SBATCH --array=0-1
   ## 0-30 31 ancestries
 
-readarray -t ANCESTRIES < ancestries.txt
+readarray -t ANCESTRIES < $1
 
 ANCESTRY=${ANCESTRIES[$SLURM_ARRAY_TASK_ID]}
 
 cd $SLURM_SUBMIT_DIR
 
-Rscript src/filter-sites.r $ANCESTRY $1 $2 $3 $4 $5
+module load languages/r/4.2.1
+
+Rscript src/filter-sites.r $ANCESTRY $2 $3 $4 $5 $6

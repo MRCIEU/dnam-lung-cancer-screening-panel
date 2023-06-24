@@ -56,20 +56,20 @@ sbatch src/gwas-fst.sh
 ## Select top ancestry mQTLs
 
 * Input: `gwas-fst/`, `gwas-glm/`, `godmc-hg38.csv.gz`, `ancestries.txt`
-* Output: Up to 50 DNAm sites associated with each ancestry in `sites/sites.csv`.
+* Output: Up to 50 DNAm sites associated with each ancestry in `sites.csv`.
 
 On the compute cluster:
 1. copy `godmc-hg38.csv.gz` to `BASE`
 2. submit the jobs to cluster as follows:
 
 ```
-sbatch src/filter-sites.sh gwas-glm gwas-fst godmc-hg38.csv.gz sites
+sbatch src/filter-sites.sh ancestries.txt gwas-glm gwas-fst godmc-hg38.csv.gz sites
 ```
 
 Afterward, collate the top 50 for each ancestry into a single file:
 
 ```
-Rscript src/select-sites.r sites sites/sites.csv
+Rscript src/select-sites.r sites sites.csv
 ```
 
 ## Check ancestry mQTLs
@@ -79,13 +79,13 @@ capture genetic variation of ancestry.
 
 ### Extract mQTL genotypes from 1000 Genomes
 
-* Input: `sites/sites.csv`, 1000 Genomes data
-* Output: Genotype vcf files in `genotypes/` for each mQTL in `sites.csv`
+* Input: `sites.csv`, 1000 Genomes data
+* Output: Genotypes for each mQTL in `sites.csv` in VCF files in `genotypes/`
 
 Submit the jobs to extract genotypes to the system as follows:
 
 ```
-Rscript src/extract-sites.r sites/sites.csv sites.txt
+Rscript src/extract-sites.r sites.csv sites.txt
 sbatch extract-genotypes.sh
 ```
 
@@ -93,12 +93,12 @@ sbatch extract-genotypes.sh
 
 Plot principal components of selected mQTLs and compare to ancestry.
 
-* Input: `sites/sites.csv` and `genotypes/*.vcf.gz` 
+* Input: `sites.csv` and `genotypes/*.vcf.gz` 
 * Output: `pca-of-genotype.pdf`
 
 ```
 Rscript src/check-sites.r \
-  sites/sites.csv \
+  sites.csv \
   genotypes \
   pca-of-genotype.pdf
 ```
