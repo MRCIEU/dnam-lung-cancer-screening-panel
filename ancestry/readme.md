@@ -15,6 +15,7 @@ and the top 50 selected for the panel.
 * Output: GoDMC summary statistics with hg38 coordinates in `godmc-hg38.csv.gz`
 
 ```
+mkdir output
 Rscript src/extract-mqtls.r godmc-hg38.csv.gz
 ```
 
@@ -61,18 +62,16 @@ sbatch src/gwas-fst.sh ancestries.txt 1000G pheno gwas-fst
 * Output: mQTLs associated with each ancestry in `sites.csv` (at
   logistic p < 5e-8)
 
-On the compute cluster:
-1. copy `godmc-hg38.csv.gz` to `BASE`
-2. submit the jobs to cluster as follows:
+On the compute cluster, submit the jobs to cluster as follows:
 
 ```
-sbatch src/filter-sites.sh ancestries.txt gwas-glm gwas-fst godmc-hg38.csv.gz sites
+sbatch src/filter-sites.sh ancestries.txt gwas-glm gwas-fst godmc-hg38.csv.gz output/sites
 ```
 
 Afterward, collate the top 50 for each ancestry into a single file:
 
 ```
-Rscript src/select-sites.r sites sites.csv
+Rscript src/select-sites.r output/sites output/sites.csv
 ```
 
 ## Check ancestry mQTLs
@@ -82,13 +81,13 @@ capture genetic variation of ancestry.
 
 ### Extract mQTL genotypes from 1000 Genomes
 
-* Input: `sites.csv`, 1000 Genomes data
-* Output: Genotypes for each mQTL in `sites.csv` in VCF files in `genotypes/`
+* Input: `output/sites.csv`, 1000 Genomes data
+* Output: Genotypes for each mQTL in `output/sites.csv` in VCF files in `genotypes/`
 
 Submit the jobs to extract genotypes to the system as follows:
 
 ```
-Rscript src/extract-sites.r sites.csv sites.txt
+Rscript src/extract-sites.r output/sites.csv sites.txt
 mkdir genotypes
 sbatch src/extract-genotypes.sh sites.txt 1000G genotypes
 ```
@@ -97,12 +96,30 @@ sbatch src/extract-genotypes.sh sites.txt 1000G genotypes
 
 Plot principal components of selected mQTLs and compare to ancestry.
 
-* Input: `sites.csv` and `genotypes/*.vcf.gz` 
-* Output: `pca-of-genotype.pdf`
+* Input: `output/sites.csv` and `genotypes/*.vcf.gz` 
+* Output: `output/pca-of-genotype.pdf`
 
 ```
 Rscript src/check-sites.r \
-  sites.csv \
+  output/sites.csv \
   genotypes \
-  pca-of-genotype.pdf
+  output/pca-of-genotype.pdf
 ```
+
+### Compare DNA methylation clusters to ancestry
+
+GSE40279: 426 Caucasian and 230 Hispanic adults
+
+```
+Rscript src/check-dnam-GSE40279.r \
+  output/sites.csv \
+  output/pca-of-dnam-GSE40279.pdf
+```
+
+GSE117861 85% AA,15% EA
+
+GSE77716 (PMID28044981) 50% Mexican and 50% Puerto Rican
+
+GSE64940 cord blood 50% AA and 50% EA
+
+

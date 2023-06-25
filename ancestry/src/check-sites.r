@@ -32,6 +32,7 @@ pheno <- as.data.frame(pheno)
 pheno <- pheno[pheno$sample %in% colnames(genotypes),]
 
 sites <- fread(file=sites.filename)
+sites$coords <- paste0("chr",sites$coords)
 stopifnot(all(sites$coords %in% rownames(genotypes)))
 
 common.samples <- intersect(colnames(genotypes), pheno$sample)

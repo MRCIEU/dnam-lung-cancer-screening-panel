@@ -4,7 +4,7 @@ args = commandArgs(trailingOnly=TRUE)
 library(data.table)
 #' For each ancestry, identify top SNPs
 #' that are mQTLs and for which
-#' logistic GWAS p < 5e-8
+#' GWAS fst > 95th (among mqtls)
 
 ancestry <- args[1]
 glm.dir <- args[2]
@@ -55,9 +55,6 @@ dat <- lapply(1:length(fst.files), function(i) {
     dat$z.glm <- dat.glm$Z_STAT
     dat$p.glm <- dat.glm$P
 
-    ## keep only with logistic p < 5e-8
-    dat <- dat[which(dat$p.glm < 5e-8),]
-
     ## add mQTL statistics
     idx <- match(dat$coords, godmc$coords)
     dat$beta.godmc <- godmc$beta[idx]
@@ -65,7 +62,10 @@ dat <- lapply(1:length(fst.files), function(i) {
     dat$pct.godmc <- godmc$beta.pct[idx]
 
     ## keep only that are also mqtls
-    dat[!is.na(dat$beta.godmc),]
+    dat <- dat[!is.na(dat$beta.godmc),]
+
+    ## keep those in the top 97.5th percentile of GWAS fst
+    dat[which(dat$HUDSON_FST > quantile(dat$HUDSON_FST,probs=0.975,na.rm=T)),]
 })
 
 dat <- do.call(rbind, dat)
