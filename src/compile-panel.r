@@ -24,7 +24,7 @@ chain.file <- retrieve.chain.file(from="hg19",to="hg38",path=annot.dir)
 
 illumina.sources <- read.csv(text="id,filename
 age,hannum-model.csv
-ancestry,output/panel-sites/panel-sites.csv
+ancestry,output/sites.csv
 bmi,bmi-model.csv
 breast-cancer,xu-sites.csv
 cadmium,cadmium-sites.csv
