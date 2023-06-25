@@ -103,7 +103,8 @@ Plot principal components of selected mQTLs and compare to ancestry.
 Rscript src/check-sites.r \
   output/sites.csv \
   genotypes \
-  output/pca-of-genotype.pdf
+  src/check-sites.rmd \
+  output/check-sites.html
 ```
 
 ### Compare DNA methylation clusters to ancestry
@@ -111,9 +112,10 @@ Rscript src/check-sites.r \
 GSE40279: 426 Caucasian and 230 Hispanic adults
 
 ```
-Rscript src/check-dnam-GSE40279.r \
+Rscript src/check-sites-GSE40279.r \
   output/sites.csv \
-  output/pca-of-dnam-GSE40279.pdf
+  src/check-sites-GSE40279.rmd \
+  output/check-sites-GSE40279.html
 ```
 
 GSE117861 85% AA,15% EA

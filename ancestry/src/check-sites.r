@@ -5,9 +5,14 @@ library(data.table)
 library(vcfR)
 library(ggfortify)
 
+library(rmarkdown)
+library(bookdown)
+library(knitr)
+
 sites.filename <- args[1]
 genotypes.dir <- args[2]
-plot.filename <- args[3]
+input.filename <- args[3]
+report.filename <- args[4]
 
 pheno.url <- "http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/integrated_call_samples_v3.20130502.ALL.panel"
 
@@ -42,21 +47,18 @@ genotypes <- genotypes[match(sites$coords, rownames(genotypes)),
 
 pheno <- pheno[match(common.samples, pheno$sample),]
 
+knitr:::opts_chunk$set(
+    fig.align="center",
+    fig.dpi=320,
+    fig.height=5,
+    fig.width=5,
+    message=FALSE,
+    warning=FALSE,
+    collapse=FALSE)
 
-pdf(plot.filename)
-pca.ret <- prcomp(t(genotypes), scale=T)
-autoplot(pca.ret, x=1, y=2, data=pheno, colour = 'super_pop')
-autoplot(pca.ret, x=2, y=3, data=pheno, colour = 'super_pop')
-autoplot(pca.ret, x=1, y=3, data=pheno, colour = 'super_pop')
-
-for (super in unique(pheno$super_pop)) {
-    insuper <- pheno$super_pop==super
-    isvar <- apply(genotypes[,insuper],1,var,na.rm=T)>0
-    pca.ret <- prcomp(t(genotypes[isvar,insuper]), scale=T)
-    print(autoplot(pca.ret, x=1, y=2, data=pheno[insuper,], colour = 'pop'))
-    print(autoplot(pca.ret, x=2, y=3, data=pheno[insuper,], colour = 'pop'))
-    print(autoplot(pca.ret, x=1, y=3, data=pheno[insuper,], colour = 'pop'))
-}
-dev.off()
-
+render(
+    input=input.filename,
+    output_file=basename(report.filename),
+    output_dir=dirname(report.filename),
+    output_format="html_document")
 

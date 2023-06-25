@@ -1,0 +1,39 @@
+---
+title: mQTL genotype and ancestry in 1000 Genomes
+---
+
+> Hannum G, Guinney J, Zhao L, Zhang L et al.
+> Genome-wide methylation profiles reveal quantitative
+> views of human aging rates. Mol Cell 2013 Jan 24;49(2):359-367.
+> PMID: 23177740
+
+> https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE40279
+
+
+```{r}
+all.sites <- sites$cpg
+pca.ret <- prcomp(t(meth[rownames(meth)%in% all.sites,]), scale=T)
+```
+
+```{r, results="asis"}
+stats <- t(apply(pca.ret$x[,1:10], 2, function(p) coef(summary(lm(p~vars$ethnicity)))[2,]))
+kable(stats)
+```
+
+```{r}
+autoplot(pca.ret, x=3, y=4, data=vars, colour = 'ethnicity', title="all sites")
+```
+
+```{r}
+sel.sites <- sites$cpg[sites$ancestry %in% c("AMR","CLM","MXL","PEL","PUR","EUR","CEU","FIN","GBR","IBS","TSI")]
+pca.ret <- prcomp(t(meth[rownames(meth)%in% sel.sites,]), scale=T)
+```
+
+```{r, results="asis"}
+stats <- t(apply(pca.ret$x[,1:10], 2, function(p) coef(summary(lm(p~vars$ethnicity)))[2,]))
+kable(stats)
+```
+
+```{r}
+autoplot(pca.ret, x=3, y=4, data=vars, colour = 'ethnicity', title="selected sites")
+```

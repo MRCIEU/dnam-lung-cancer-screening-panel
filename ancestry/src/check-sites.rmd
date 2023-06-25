@@ -1,0 +1,34 @@
+---
+title: mQTL genotype and ancestry in 1000 Genomes
+---
+
+```{r}
+pca.ret <- prcomp(t(genotypes), scale=T)
+```
+
+```{r, results="asis"}
+stats <- apply(pca.ret$x[,1:10], 2, function(pc) {
+    fit <- lm(pc ~ super_pop, data=pheno)
+    as.data.frame(anova(fit))["super_pop",]
+})
+kable(do.call(rbind, stats))
+```
+
+```{r}
+print(autoplot(pca.ret, x=1, y=2, data=pheno, colour = 'super_pop'))
+print(autoplot(pca.ret, x=2, y=3, data=pheno, colour = 'super_pop'))
+print(autoplot(pca.ret, x=1, y=3, data=pheno, colour = 'super_pop'))
+```
+
+
+```{r}
+for (super in unique(pheno$super_pop)) {
+    insuper <- pheno$super_pop==super
+    isvar <- apply(genotypes[,insuper],1,var,na.rm=T)>0
+    pca.ret <- prcomp(t(genotypes[isvar,insuper]), scale=T)
+    print(autoplot(pca.ret, x=1, y=2, data=pheno[insuper,], colour = 'pop', main=super))
+    print(autoplot(pca.ret, x=2, y=3, data=pheno[insuper,], colour = 'pop', main=super))
+    print(autoplot(pca.ret, x=1, y=3, data=pheno[insuper,], colour = 'pop', main=super))
+}
+```
+
