@@ -1,16 +1,20 @@
 ---
-title: Differentiating Mexican from European ancestry
+title: Differentiating between Mexican and Puerto Rican ancestry
 ---
 
-> Hannum G, Guinney J, Zhao L, Zhang L et al.
-> Genome-wide methylation profiles reveal quantitative
-> views of human aging rates. Mol Cell 2013 Jan 24;49(2):359-367.
-> PMID: 23177740
+> Galanter JM, Gignoux CR, Oh SS, Torgerson D et al. Differential methylation between ethnic sub-groups reflects the effect of genetic ancestry and environmental exposures. Elife 2017 Jan 3;6. PMID: 28044981
 
-> https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE40279
+> https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE77716
 
 ```{r}
 kableone(CreateTableOne(colnames(vars), data=vars), showAllLevels=T)
+```
+
+Restricting to just Mexican and Puerto Rican.
+```{r}
+idx <- which(vars$ethnicity %in% c("Mexican","Puerto Rican"))
+vars <- vars[idx,]
+meth <- meth[,idx]
 ```
 
 ```{r}
@@ -38,7 +42,7 @@ autoplot(pca.ret, x=best[1], y=best[2], data=vars, colour = 'ethnicity', title="
 ```
 
 ```{r}
-sel.sites <- sites$cpg[sites$ancestry %in% c("AMR","CLM","MXL","PEL","PUR","EUR","CEU","FIN","GBR","IBS","TSI")]
+sel.sites <- sites$cpg[sites$ancestry %in% c("AMR","CLM","MXL","PEL","PUR")]
 ```
 
 `r round(mean(all.sites %in% sel.sites)*100,1)`%
@@ -58,3 +62,4 @@ lmable(stats,digits=3)
 best <- order(stats[,ncol(stats)])[1:2]
 autoplot(pca.ret, x=best[1], y=best[2], data=vars, colour = 'ethnicity', title="selected sites")
 ```
+

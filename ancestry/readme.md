@@ -109,19 +109,14 @@ Rscript src/check-sites.r \
 
 ### Compare DNA methylation clusters to ancestry
 
-GSE40279: 426 Caucasian and 230 Hispanic adults
+* Input: `output/sites.csv` and `src/check-sites-GSE*.{r,rmd}`
+* Output: `output/check-sites-GSE*.html`
 
-```
-Rscript src/check-sites-GSE40279.r \
-  output/sites.csv \
-  src/check-sites-GSE40279.rmd \
-  output/check-sites-GSE40279.html
+```{r}
+bash src/run-dnam-checks.sh
 ```
 
-GSE117861 85% AA,15% EA
 
-GSE77716 (PMID28044981) 50% Mexican and 50% Puerto Rican
 
-GSE64940 cord blood 50% AA and 50% EA
 
 

@@ -1,0 +1,43 @@
+---
+title: Differentiating African and European American ancestry (cord blood)
+---
+
+> Mozhui K, Smith AK, Tylavsky FA. Ancestry dependent DNA methylation and influence of maternal nutrition. PLoS One 2015;10(3):e0118466. PMID: 25742137
+
+> https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE64940
+
+```{r}
+kableone(CreateTableOne(colnames(vars), data=vars), showAllLevels=T)
+```
+
+Restricting to just AA and EA.
+```{r}
+idx <- which(vars$race %in% c("AA","EA"))
+vars <- vars[idx,]
+meth <- meth[,idx]
+```
+
+```{r}
+all.sites <- unique(sites$cpg)
+```
+
+`r length(intersect(all.sites, rownames(meth)))`
+of the `r length(all.sites)` 
+selected mQTL CpG sites are in the DNAm dataset.
+
+```{r}
+pca.ret <- prcomp(t(meth[rownames(meth)%in% all.sites,]), scale=T)
+```
+
+```{r, results="asis"}
+stats <- t(apply(pca.ret$x[,1:10], 2, function(p) {
+    coef(summary(lm(p~vars$race)))[2,]
+}))
+lmable(stats,digits=3)
+```
+
+```{r}
+best <- order(stats[,ncol(stats)])[1:2]
+autoplot(pca.ret, x=best[1], y=best[2], data=vars, colour = 'race', title="all sites")
+```
+

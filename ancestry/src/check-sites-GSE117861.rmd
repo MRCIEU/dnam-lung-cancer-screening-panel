@@ -1,0 +1,65 @@
+---
+title: Differentiating White and Black ancestry
+---
+
+> Zhang X, Hu Y, Aouizerat BE, Peng G et al. Machine learning selected smoking-associated DNA methylation signatures that predict HIV prognosis and mortality. Clin Epigenetics 2018 Dec 13;10(1):155. PMID: 30545403
+
+> https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE117861
+
+```{r}
+kableone(CreateTableOne(colnames(vars), data=vars), showAllLevels=T)
+```
+
+Restricting to just "Black" and "White" ancestry.
+
+```{r}
+idx <- which(vars$race %in% c("Black","White"))
+vars <- vars[idx,]
+meth <- meth[,idx]
+```
+
+```{r}
+all.sites <- unique(sites$cpg)
+```
+
+`r length(intersect(all.sites, rownames(meth)))`
+of the `r length(all.sites)` 
+selected mQTL CpG sites are in the DNAm dataset.
+
+```{r}
+pca.ret <- prcomp(t(meth[rownames(meth)%in% all.sites,]), scale=T)
+```
+
+```{r, results="asis"}
+stats <- t(apply(pca.ret$x[,1:10], 2, function(p) {
+    coef(summary(lm(p~vars$race)))[2,]
+}))
+lmable(stats,digits=3)
+```
+
+```{r}
+best <- order(stats[,ncol(stats)])[1:2]
+autoplot(pca.ret, x=best[1], y=best[2], data=vars, colour = 'race', title="all sites")
+```
+
+```{r}
+sel.sites <- sites$cpg[sites$ancestry %in% c("AFR","ACB","ASW","ESN","GWD","LWK","MSL","YRI","EUR","CEU","FIN","GBR","IBS","TSI")]
+```
+
+`r round(mean(all.sites %in% sel.sites)*100,1)`%
+of the mQTL CpG sites were selected to differentiate between
+European (EUR) and admixed American (AMR) ancestries.
+
+```{r}
+pca.ret <- prcomp(t(meth[rownames(meth)%in% sel.sites,]), scale=T)
+```
+
+```{r, results="asis"}
+stats <- t(apply(pca.ret$x[,1:10], 2, function(p) coef(summary(lm(p~vars$race)))[2,]))
+lmable(stats,digits=3)
+```
+
+```{r}
+best <- order(stats[,ncol(stats)])[1:2]
+autoplot(pca.ret, x=best[1], y=best[2], data=vars, colour = 'race', title="selected sites")
+```

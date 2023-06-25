@@ -11,18 +11,18 @@ library(knitr)
 library(kableExtra)
 library(tableone)
 
-sites.filename <- args[1] ## output/sites.csv
-input.filename <-  args[2] ## src/check-sites-GSE40279.rmd
-report.filename <- args[3]  ## output/check-sites-GSE40279.html
+sites.filename <- args[1] ## sites.filename="output/sites.csv"
+input.filename <-  args[2] ## input.filename="src/check-sites-GSE64940.rmd"
+report.filename <- args[3]  ## report.filename="output/check-sites-GSE64940.html"
 
 sites <- fread(sites.filename)
 
 dir.create(geo.dir <- "geo", showWarnings=F)
 
-filename <- geograbi.download.series.files(path=geo.dir, gses="GSE40279")
+filename <- geograbi.download.series.files(path=geo.dir, gses="GSE64940")
 samples <- geograbi.get.samples(filename)
 vars <- geograbi.extract.characteristics(samples)
-vars[,"age (y)"] <- as.numeric(vars[,"age (y)"])
+ilogit2 <- function(x) 2^x / (1 + 2^x)
 meth <- geograbi.read.gse.matrix(filename)$data
 
 knitr:::opts_chunk$set(

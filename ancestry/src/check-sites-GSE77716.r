@@ -11,19 +11,33 @@ library(knitr)
 library(kableExtra)
 library(tableone)
 
-sites.filename <- args[1] ## output/sites.csv
-input.filename <-  args[2] ## src/check-sites-GSE40279.rmd
-report.filename <- args[3]  ## output/check-sites-GSE40279.html
+sites.filename <- args[1] ## sites.filename="output/sites.csv"
+input.filename <-  args[2] ## input.filename="src/check-sites-GSE77716.rmd"
+report.filename <- args[3]  ## report.filename="output/check-sites-GSE77716.html"
 
 sites <- fread(sites.filename)
 
 dir.create(geo.dir <- "geo", showWarnings=F)
 
-filename <- geograbi.download.series.files(path=geo.dir, gses="GSE40279")
+gse <- "GSE77716"
+
+filename <- geograbi.download.series.files(path=geo.dir, gses=gse)
 samples <- geograbi.get.samples(filename)
 vars <- geograbi.extract.characteristics(samples)
-vars[,"age (y)"] <- as.numeric(vars[,"age (y)"])
-meth <- geograbi.read.gse.matrix(filename)$data
+vars <- vars[,c("gender","sample type","ethnicity")]
+
+filename <- geograbi.download.supplementary.file(
+    path=geo.dir,
+    gse=gse,
+    filename=paste0(gse, "_Matrix_processed.tsv.gz"))
+
+meth <- as.data.frame(fread(filename))
+rownames(meth) <- meth[,"ID_REF"]
+meth <- meth[,!grepl("^(Detection|ID_REF)",colnames(meth))]
+
+stopifnot(all(samples$title %in% colnames(meth)))
+
+meth <- meth[,samples$title]
 
 knitr:::opts_chunk$set(
     fig.align="center",
