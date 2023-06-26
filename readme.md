@@ -26,7 +26,7 @@ Genomic coordinates will refer to the hg38 human genome assembly.
 ## Checking the final panel
 
 ```
-Rscript src/check-against-meffonym.r panel-reduced.csv 
+Rscript src/check-against-meffonym.r panel-reduced.csv checks/meffonym.csv 
 ```
 
 Note: We perhaps conspicuously don't include PhenoAge, CRP and DunedinPoam38.

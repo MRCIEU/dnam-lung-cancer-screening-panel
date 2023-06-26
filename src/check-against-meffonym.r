@@ -2,6 +2,7 @@
 args = commandArgs(trailingOnly=TRUE)
 
 selected.filename <- args[1]
+output.filename <- args[2]
 
 library(meffonym) ## remotes::install_github("perishky/meffonym")
 
@@ -21,5 +22,5 @@ stopifnot(
     results[results[,"model"] %in% included.models,"overlap"])
 
 
-write.csv(results, file="checks/meffonym.csv",row.names=F)
+write.csv(results, file=output.filename, row.names=F)
 
