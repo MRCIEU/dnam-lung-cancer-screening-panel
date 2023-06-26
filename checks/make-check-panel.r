@@ -11,4 +11,7 @@ set.seed(27435)
 idx <- sample(1:nrow(sites))
 my.sites <- sites[idx,]
 
-write.csv(my.sites, file=output.filename, row.names=F)
+write.csv(my.sites, 
+	file=output.filename,
+	quote = F, 
+	row.names=F)
