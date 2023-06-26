@@ -23,6 +23,14 @@ Rscript src/compile-panel.r panel.csv panel-reduced.csv annotation/
 
 Genomic coordinates will refer to the hg38 human genome assembly.
 
+## Checking the final panel
+
+```
+Rscript src/check-against-meffonym.r panel-reduced.csv 
+```
+
+Note: We perhaps conspicuously don't include PhenoAge, CRP and DunedinPoam38.
+
 ## Adding additional sites to the panel
 
 1. Add a folder containing documentation and files relevant to the addition.  In particular, include one or more csv files providing either genomic regions (chr,start,end columns) or Illumina Beadchip CpG site identifiers (cpg column).
