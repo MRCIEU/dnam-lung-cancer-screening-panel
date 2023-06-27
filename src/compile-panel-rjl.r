@@ -191,7 +191,7 @@ panel <- rbind(
     illumina.sites.hg38,
     hg19.regions.hg38)
 
-fwrite(panel, file="panel-rjl.csv")
+fwrite(panel, file="panel-20230607.csv")
 
 ## merge overlapping regions
 panel.gr <- to.granges(panel$chr,panel$start,panel$end)
@@ -210,7 +210,7 @@ panel.reduced$source <- sapply(mapping, function(idx) paste(unique(panel$source[
 
 panel.reduced$details <- sapply(mapping, function(idx) paste(unique(panel$details[idx]),collapse="/")) 
 
-fwrite(panel.reduced, file="panel-reduced-rjl.csv")
+fwrite(panel.reduced, file="panel-reduced-20230607.csv")
 
 ## check the panels
 
