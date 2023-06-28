@@ -3,22 +3,17 @@ args = commandArgs(trailingOnly=TRUE)
 
 output.filename <- args[1]
 reduced.filename <- args[2]
-dir.create(annot.dir <- args[3], showWarnings=F)
 
 library(data.table)
+
+## load functions for manipulating GenomicRanges (specifically the 'reduce()' function)
+
+source("src/granges.r")
 
 ## load illumina 450k/epic annotation
 
 source("src/load-illumina-manifest-function.r")
-manifest <- load.illumina.manifest(annot.dir)
-
-## load chain file for converting hg19 to hg38 genomic coordinates
-
-## BiocManager::install("liftOver")
-library(liftOver)
-source("src/granges.r")
-source("src/liftover-function.r")
-chain.file <- retrieve.chain.file(from="hg19",to="hg38",path=annot.dir)
+manifest <- load.illumina.manifest(".")
 
 ## sources obtained from Illumina bead chips
 
@@ -30,7 +25,9 @@ breast-cancer,xu-sites.csv
 cadmium,cadmium-sites.csv
 copd,important-sites.csv
 cotinine,discovery-sites.csv
+crp,crp-sites.csv
 dunedin-pace,pace-model.csv
+dunedin-pace-poam38,dunedinpoam38-sites.csv
 educational-attainment,sites.csv
 episcores,episcore-sites.csv
 lead,lead-model.csv
@@ -44,9 +41,9 @@ smoking-cessation,mccartney-sites.csv
 smoking-former,andrayas-sites.csv
 smoking-status,maas-sites.csv", stringsAsFactors=F)
 
-## sources with hg19 coordinates
+## sources that supply genomic regions
 
-hg19.sources <- read.csv(text="id,filename
+region.sources <- read.csv(text="id,filename
 blood-cell-types,regions-hg19.csv
 colorectal-cancer,regions-hg19.csv", stringsAsFactors=F)
 
@@ -75,13 +72,13 @@ illumina.sites <- data.frame(
     end=manifest$MAPINFO[idx],
     stringsAsFactors=F)
 
-## load regions with hg19 coordinates
+## load regions 
 
-hg19.regions <- lapply(
-    1:nrow(hg19.sources),
+regions <- lapply(
+    1:nrow(region.sources),
     function(i) {
-        id <- hg19.sources$id[i]
-        filename <- file.path(id, hg19.sources$filename[i])
+        id <- region.sources$id[i]
+        filename <- file.path(id, region.sources$filename[i])
         cat("loading", filename, "\n")
         dat <- read.csv(filename, stringsAsFactors=F)
         data.frame(
@@ -89,34 +86,13 @@ hg19.regions <- lapply(
             dat[,c("chr","start","end","details")],
             stringsAsFactors=F)
     })
-hg19.regions <- do.call(rbind, hg19.regions)
-
-## convert to hg38 coordinates
-
-illumina.sites$chr <- paste0("chr", illumina.sites$chr)
-illumina.sites.hg38 <- cbind(
-    liftover(illumina.sites,chain.file),
-    illumina.sites[,c("source","details")])
-
-hg19.regions.hg38 <- cbind(
-    liftover(hg19.regions, chain.file),
-    hg19.regions[,c("source","details")])
-
-## fix one region
-
-idx <- which(is.na(illumina.sites.hg38$chr))
-stopifnot(
-    length(idx)==1 &
-    illumina.sites.hg38$details[idx]=="cg23997508")
-illumina.sites.hg38$chr[idx] <- "chr22"
-illumina.sites.hg38$start[idx] <- 12097170
-illumina.sites.hg38$end[idx] <- 12097170
+regions <- do.call(rbind, regions)
 
 ## merge all regions into a single panel and save it
 
 panel <- rbind(
-    illumina.sites.hg38,
-    hg19.regions.hg38)
+    illumina.sites,
+    regions)
 
 fwrite(panel, file=output.filename)
 
@@ -135,56 +111,7 @@ mapping <- lapply(1:nrow(panel.reduced), function(i) {
 
 panel.reduced$source <- sapply(mapping, function(idx) paste(unique(panel$source[idx]),collapse="/"))
 
-panel.reduced$details <- sapply(mapping, function(idx) paste(unique(panel$details[idx]),collapse="/")) 
+panel.reduced$details <- sapply(mapping, function(idx) paste(unique(panel$details[idx]),collapse="/"))
 
 fwrite(panel.reduced, file=reduced.filename)
-
-
-
-## check the panels
-
-nrow(panel)
-## 3880
-
-nrow(panel.reduced)
-## 2791
-
-quantile(panel$end-panel$start)
-##  0%  25%  50%  75% 100% 
-##   0    0    0    0 1457
-
-quantile(setdiff(panel$end-panel$start,0))
-##     0%     25%     50%     75%    100% 
-##  23.00  174.25  281.50  417.50 1457.00 
-
-quantile(setdiff(panel.reduced$end-panel.reduced$start,0))
-##     0%     25%     50%     75%    100% 
-##  23.00  174.25  281.50  417.50 1457.00 
-
-table(sapply(mapping,length))
-##   1    2    3    4    5    6    7    8    9   10   11   12   14 
-##2285  264  101   52   47   12   18    4    2    1    1    2    2 
-
-panel.reduced$source[which(sapply(mapping,length) > 10)]
-#[1] "ancestry"                                                                                          
-#[2] "ancestry"                                                                                          
-#[3] "bmi/cadmium/cotinine/educational-attainment/episcores/lung-cancer/smoking-cessation/smoking-status"
-#[4] "ancestry"                                                                                          
-#[5] "ancestry"                                                                                          
-## (indicates that some CpG sites are being used for multiple ancestries)
-
-table(sapply(strsplit(panel.reduced$source, "/"), length))
-##   1    2    3    4    5    6    7    8 
-##2696   74   12    3    2    1    1    2 
-
-panel.reduced[which(sapply(strsplit(panel.reduced$source, "/"),length) > 5),"source"]
-## [1] "cadmium/cotinine/dunedin-pace/educational-attainment/episcores/lung-cancer/smoking-cessation/smoking-status"
-## [2] "cadmium/cotinine/educational-attainment/episcores/lung-cancer/smoking-cessation/smoking-status"             
-## [3] "bmi/cadmium/cotinine/educational-attainment/episcores/lung-cancer/smoking-cessation/smoking-status"         
-## [4] "cadmium/cotinine/episcores/lung-cancer/smoking-cessation/smoking-status"                                    
-
-table(sapply(strsplit(panel.reduced$details, "/"), length))
-##   1 
-##2791
-
 

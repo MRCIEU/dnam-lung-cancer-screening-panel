@@ -1,3 +1,5 @@
+library(GenomicRanges)
+
 to.granges <- function(chr,start,end) {
     txt <- paste0(chr,":",start,"-",end)
     as(txt, "GRanges")

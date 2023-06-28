@@ -1,4 +1,9 @@
+## BiocManager::install("liftOver")
+library(liftOver)
+source("src/granges.r")
 
+#' e.g. to convert from hg19 to hg38 coordinates
+#' chain.file <- retrieve.chain.file(from="hg19",to="hg38",path=annot.dir)
 retrieve.chain.file <- function(from,to,path=".") {
     capitalize <- function(str)
         paste0(toupper(substring(str,1,1)), tolower(substring(str,2)))

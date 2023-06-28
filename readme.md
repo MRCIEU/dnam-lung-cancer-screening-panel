@@ -12,22 +12,19 @@ in [ancestry/readme.md](ancestry/readme.md).
 ## Compiling the final panel
 
 ```
-Rscript src/compile-panel.r panel.csv panel-reduced.csv annotation/
+Rscript src/compile-panel.r panel.csv panel-reduced.csv 
 ```
 
 * `panel.csv` will provide a list of regions with some information about why they were selected (see 'source' and 'details').
 
 * `panel-reduced.csv` will be the same as `panel.csv` but will have merged any overlapping regions.
 
-* `annotation/` will contain any genome or microarray annotation files that were used in the computation.
-
-Genomic coordinates will refer to the hg38 human genome assembly.
+Genomic coordinates will refer to the **hg19** human genome assembly.
 
 ## Checking the final panel
 
-```
-Rscript src/check-against-meffonym.r panel-reduced.csv checks/meffonym.csv 
-```
+After creating the panel, run a few checks to reduce risk of errors.
+See [checks/readme.md](checks/readm.md) for more details.
 
 ## Adding additional sites to the panel
 
