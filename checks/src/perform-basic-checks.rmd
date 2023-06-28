@@ -1,0 +1,30 @@
+---
+title: Basic panel checks
+---
+
+```{r}
+# number selected regions
+nrow(panel)
+
+# number unique regions
+nrow(panel.reduced)
+
+# region size
+quantile(panel$end-panel$start+1)
+
+# region sizes if we omit single CpG sites
+quantile(setdiff(panel$end-panel$start,0)+1)
+
+# verify that all panel regions in reduced panel
+stopifnot(all(
+    sapply(1:nrow(panel), function(i) {
+        with(panel.reduced, any(chr==panel$chr[i] & start <= panel$start[i] & panel$end[i] <= end))
+    })))
+
+## are there sites selected by many sources (i.e. EWAS/models)?
+mapping <- strsplit(panel.reduced$source, "/")
+table(sapply(mapping,length))
+
+## what are the sources for the sites with most sources?
+panel.reduced$source[which(sapply(mapping,length) > 5)]
+```

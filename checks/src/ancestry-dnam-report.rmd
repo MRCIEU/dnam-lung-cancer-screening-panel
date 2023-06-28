@@ -1,0 +1,65 @@
+---
+title: "`r params$report.title`"
+---
+
+```{r}
+meth <- meth[which(rownames(meth) %in% sites),]
+if (any(is.na(meth))) {
+    impute.mean <- function(x) {
+        idx <- which(is.na(x),arr.ind=T)
+        if (length(idx) == 0) return(x)
+        m <- rowMeans(x,na.rm=T)
+        x[idx] <- m[idx[1,]]
+        x
+    }
+    meth <- impute.mean(meth)
+}
+methvar <- rowVars(meth,na.rm=T)
+meth <- meth[which(methvar > 2e-16),,drop=F]
+```
+
+## Source
+
+```{r, results="asis"}
+cat(">", params$dataset.citation, "\n\n>", params$dataset.url, "\n")
+```
+
+## Population
+
+```{r}
+kableone(CreateTableOne(colnames(vars), data=vars), showAllLevels=T) %>% kable_styling()
+```
+
+## Panel CpG sites in the dataset
+
+`r length(intersect(sites, rownames(meth)))`
+of the `r length(sites)` 
+selected mQTL CpG sites are in the DNAm dataset.
+
+## Clustering by principle components
+
+```{r}
+pca.ret <- prcomp(t(meth), scale=T)
+```
+
+Associations of ancestry with top 20 principle components
+of the DNA methylation dataset (restricted to sites in the panel).
+
+```{r, results="asis"}
+stats <- apply(pca.ret$x[,1:20], 2, function(pc) {
+    fit <- lm(pc ~ ancestry, data=vars)
+    as.data.frame(anova(fit))["ancestry",]
+})
+stats <- do.call(rbind, stats)
+lmable(stats) %>% kable_styling()
+```
+
+Plot of three components with the strongest associations
+
+```{r}
+best <- order(stats[,ncol(stats)])[1:3]
+autoplot(pca.ret, x=best[1], y=best[2], data=vars, colour = 'ancestry')
+autoplot(pca.ret, x=best[1], y=best[3], data=vars, colour = 'ancestry')
+autoplot(pca.ret, x=best[2], y=best[3], data=vars, colour = 'ancestry')
+```
+
