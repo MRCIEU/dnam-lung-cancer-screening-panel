@@ -15,7 +15,9 @@ geo.url <- "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc="
 datasets$dataset.url <- paste0(geo.url, datasets$gse)
 
 source("src/render-ancestry-dnam-report-function.r")
-                          
+
+ilogit2 <- function(x) 2^x / (1 + 2^x) ## needed by geograbi to load GEO datasets
+
 for (i in 1:nrow(datasets)) {
     report.filename <- file.path(output.dir, paste0("ancestry-dnam-", datasets$gse[i], ".html"))
     if (file.exists(report.filename))
