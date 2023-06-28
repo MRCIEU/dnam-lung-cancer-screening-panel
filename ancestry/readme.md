@@ -79,8 +79,6 @@ Rscript src/select-sites.r output/sites output/sites.csv
 Determine to what extent the SNPs identified actually
 capture genetic variation of ancestry.
 
-### Extract mQTL genotypes from 1000 Genomes
-
 * Input: `output/sites.csv`, 1000 Genomes data
 * Output: Genotypes for each mQTL in `output/sites.csv` in VCF files in `genotypes/`
 
@@ -92,31 +90,5 @@ mkdir genotypes
 sbatch src/extract-genotypes.sh sites.txt 1000G genotypes
 ```
 
-### Compare genetic clusters to ancestry
-
-Plot principal components of selected mQTLs and compare to ancestry.
-
-* Input: `output/sites.csv` and `genotypes/*.vcf.gz` 
-* Output: `output/pca-of-genotype.pdf`
-
-```
-Rscript src/check-sites.r \
-  output/sites.csv \
-  genotypes \
-  src/check-sites.rmd \
-  output/check-sites.html
-```
-
-### Compare DNA methylation clusters to ancestry
-
-* Input: `output/sites.csv` and `src/check-sites-GSE*.{r,rmd}`
-* Output: `output/check-sites-GSE*.html`
-
-```{r}
-bash src/run-dnam-checks.sh
-```
-
-
-
-
-
+For further checks of the CpG sites selected
+here, see [../checks/readme.md](../checks/readme.md).
