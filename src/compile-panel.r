@@ -19,6 +19,10 @@ manifest <- load.illumina.manifest(".")
 
 illumina.sources <- read.csv(text="id,filename
 age,hannum-model.csv
+alcohol-consumption,alc-ewas-sites.csv
+alcohol-consumption,chamberlain-sites.csv
+alcohol-consumption,dnamalci-sites.csv
+alcohol-consumption,mccartney-sites.csv
 ancestry,output/sites.csv
 bmi,bmi-model.csv
 breast-cancer,xu-sites.csv
@@ -29,7 +33,11 @@ crp,crp-sites.csv
 dunedin-pace,pace-model.csv
 dunedin-pace-poam38,dunedinpoam38-sites.csv
 educational-attainment,sites.csv
+egfr,egfr-afr-sites.csv
+egfr,glomerular-filtration-sites.csv
 episcores,episcore-sites.csv
+hdl,mccartney-sites.csv
+il6,stevenson-sites.csv
 lead,lead-model.csv
 lung-cancer,battram-sites.csv
 lung-cancer,zhao-sites.csv
