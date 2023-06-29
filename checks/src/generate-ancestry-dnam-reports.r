@@ -1,11 +1,11 @@
 #!/usr/bin/env Rscript
 args = commandArgs(trailingOnly=TRUE)
 
-library(data.table)
-
 sites.filename <- args[1]
 datasets.filename <- args[2]
 output.dir <- args[3]
+
+library(data.table)
 
 sites <- unique(fread(sites.filename)$details)
 sites <- sites[grepl("^cg[0-9]+$",sites)]

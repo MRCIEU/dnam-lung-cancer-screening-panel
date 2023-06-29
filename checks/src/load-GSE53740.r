@@ -12,3 +12,7 @@ meth <- geograbi.read.gse.matrix(filename)$data
 meth <- as.matrix(meth)
 
 vars$ancestry <- vars$race
+
+keep <- vars$ancestry %in% c("Chinese","Caucasian","Filipino","Hispanic","Japanese","Mexican","White")
+meth <- meth[,keep]
+vars <- vars[keep,]

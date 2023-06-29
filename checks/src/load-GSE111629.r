@@ -27,3 +27,4 @@ stopifnot(all(samples$source_name_ch1 %in% colnames(meth)))
 meth <- meth[,samples$source_name_ch1]
 
 vars$ancestry <- vars$ethnicity
+

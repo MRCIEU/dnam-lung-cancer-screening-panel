@@ -24,6 +24,9 @@ meth <- lapply(gses, function(gse) {
     meth <- as.data.frame(fread(filename))
     rownames(meth) <- meth[,1]
     meth <- meth[,-1]
+    for (i in 1:ncol(meth))
+        if (!is.numeric(meth[[i]]))
+            meth[[i]] <- as.numeric(meth[[i]])
     meth <- as.matrix(meth)
     id <- sub(".* (Sample[0-9]+)$", "\\1", samples[[gse]]$title)
     stopifnot(all(id %in% colnames(meth)))

@@ -3,17 +3,10 @@ title: "`r params$report.title`"
 ---
 
 ```{r}
+source("impute-mean-function.r")
 meth <- meth[which(rownames(meth) %in% sites),]
-if (any(is.na(meth))) {
-    impute.mean <- function(x) {
-        idx <- which(is.na(x),arr.ind=T)
-        if (length(idx) == 0) return(x)
-        m <- rowMeans(x,na.rm=T)
-        x[idx] <- m[idx[1,]]
-        x
-    }
+if (any(is.na(meth))) 
     meth <- impute.mean(meth)
-}
 methvar <- rowVars(meth,na.rm=T)
 meth <- meth[which(methvar > 2e-16),,drop=F]
 ```

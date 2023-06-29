@@ -9,6 +9,9 @@ filename <- geograbi.download.series.files(path=geo.dir, gses=gse)
 samples <- geograbi.get.samples(filename)
 vars <- geograbi.extract.characteristics(samples)
 vars <- vars[,c("cell type","diagnosis","age (years)", "gender","race","therapy","disease duration (months)")]
+vars[,"age (years)"] <- as.numeric(vars[,"age (years)"])
+vars[,"disease duration (months)"] <- as.numeric(vars[,"disease duration (months)"])
+
 
 filename <- geograbi.download.supplementary.file(
     path=geo.dir,
