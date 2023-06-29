@@ -15,7 +15,7 @@ results <- t(sapply(models, function(model) {
     c(model=model,n=length(sites), overlap=length(intersect(sites,selection$details)))
 }))
 
-included.models <- c("CXCL9","EN.RAGE","hannum","HGF","IGFBP-1","MMP-12","OSM","TGF.alpha","VEGFA")
+included.models <- c("CXCL9","EN.RAGE","hannum","HGF","IGFBP-1","MMP-12","OSM","TGF.alpha","VEGFA","dunedinpoam38")
 stopifnot(
     results[results[,"model"] %in% included.models,"n"]
     ==       
