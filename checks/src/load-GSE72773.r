@@ -8,7 +8,6 @@ gses <- c("GSE72773","GSE72775")
 filenames <- geograbi.download.series.files(path=geo.dir, gses=gses)
 samples <- lapply(filenames, geograbi.get.samples)
 vars <- lapply(samples, geograbi.extract.characteristics)
-
 names(samples) <- names(vars) <- gses
 
 for (i in 1:length(vars)) {
@@ -41,4 +40,4 @@ meth <- do.call(cbind, meth)
 vars <- do.call(rbind, vars)
 
 vars$ancestry <- vars$ethnicity
-
+vars$age <- as.numeric(vars$age)
