@@ -35,7 +35,9 @@ meth <- lapply(gses, function(gse) {
     meth - rowMeans(meth,na.rm=T)
 })
 
-meth <- do.call(rbind, meth)
+stopifnot(identical(rownames(meth[[1]]), rownames(meth[[2]])))
+
+meth <- do.call(cbind, meth)
 vars <- do.call(rbind, vars)
 
 vars$ancestry <- vars$ethnicity
