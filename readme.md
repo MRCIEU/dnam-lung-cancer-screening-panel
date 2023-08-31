@@ -1,5 +1,13 @@
 # Lung Cancer Screening Panel Pipeline
 
+## Dependencies
+
+All required R packages can be installed as follows:
+
+```
+Rscript src/install-r-packages.r
+```
+
 ## Ancestry
 
 Before attempting to compile the final panel, verify that the

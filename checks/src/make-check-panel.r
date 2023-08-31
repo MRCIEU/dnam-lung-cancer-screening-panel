@@ -2,12 +2,12 @@
 args = commandArgs(trailingOnly=TRUE)
 
 library(data.table)
-library(tidyverse)
 sites.filename <- args[1]
 output.filename <- args[2]
 
-sites <- fread(file=sites.filename) %>%
-			as.data.frame()
+sites <- fread(file=sites.filename)
+sites <- as.data.frame(sites)
+
 sites$spot.checked <- 0
 
 set.seed(27435)
