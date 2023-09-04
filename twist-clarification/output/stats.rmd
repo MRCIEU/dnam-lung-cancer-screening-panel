@@ -1,0 +1,32 @@
+## Impact of repetitive DNA on proposed panel
+
+### All affected regions of length at least 2 are for estimating blood cell counts
+
+```{r}
+stopifnot(all(!(panel$uncovered & panel$end-panel$start > 1) | panel$source == "blood-cell-types"))
+```
+
+### For each blood cell type, less than half of regions affected
+
+```{r}
+kable(with(panel[panel$source == "blood-cell-types",], stats.table(uncovered, details)))
+```
+
+### For each ancestry, less than one-tenth of CpG sites affected
+
+```{r}
+kable(with(ancestry,stats.table(uncovered, ancestry)))
+```
+
+### For each episcore, less than 3% of CpG sites affected
+
+```{r}
+kable(with(episcores,stats.table(uncovered,gene)))
+```
+
+### For most remaining sources, less than 2% of CpG sites affected
+
+```{r}
+kable(with(panel[! panel$source %in% c("blood-cell-types","ancestry","episcores"),],
+           stats.table(uncovered,source)))
+```
