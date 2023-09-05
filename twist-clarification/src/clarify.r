@@ -33,9 +33,9 @@ colnames(uncovered) <- c("chr","start","end")
 uncovered$idx <- sapply(1:nrow(uncovered), function(i) 
     with(uncovered, 
          which(
-             panel$chr==uncovered$chr[i]
-             & panel$start <= uncovered$start[i]
-             & panel$end >= uncovered$end[i])))
+             panel$chr==chr[i]
+             & panel$start <= start[i]
+             & panel$end >= end[i])))
 
 ## make sure all bed file regions map to panel regions
 stopifnot(all(sapply(uncovered$idx,length) > 0))

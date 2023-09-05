@@ -1,0 +1,39 @@
+## Proposed panel vs desired targets
+
+### Logical checks
+
+```{r}
+stopifnot(!panel$uncovered | !panel$covered)
+stopifnot(!panel$covered | panel$has.coverage)
+```
+
+### All affected regions of length at least 2 are for estimating blood cell counts
+
+```{r}
+stopifnot(all(!(panel$uncovered & panel$end-panel$start > 1) | panel$source == "blood-cell-types"))
+```
+
+### For each blood cell type, at most 20% of regions are affected
+
+```{r}
+kable(with(panel[panel$source == "blood-cell-types",], stats.table(uncovered, details)))
+```
+
+### For each blood cell type, at most 8% of the regions have no coverage at all
+
+```{r}
+kable(with(panel[panel$source == "blood-cell-types",], stats.table(!has.coverage, details)))
+```
+
+### For most remaining sources, less than 2% of CpG sites affected
+
+```{r}
+kable(with(panel[panel$source != "blood-cell-types",],
+           stats.table(uncovered,source)))
+```
+
+```{r}
+kable(with(panel[panel$source != "blood-cell-types",],
+           stats.table(!has.coverage,source)))
+```
+

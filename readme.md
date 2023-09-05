@@ -46,15 +46,17 @@ Twist bioinformatics responded to our request
 noting that about 20% of our requested regions were difficult to 
 target due to repetitive DNA.
 
-Evaluation of these regions in terms of our planned use of them
-suggested that we should try to target them but that, 
-if targeting failed, then the impact would be small.
-For example, most DNAm models would at most lose 2-3% of CpG sites, 
-each ancestry would retain more than 90% of ancestry-specific sites, 
-and each cell type would retain more than 50% of cell-type specific regions.
-
-For more details, see 
+Details can be found here:
 [twist-clarification/readme.md](twist-clarification/readme.md).
 
-The targeting statistics can be found here: 
+Additional coverage statistics we generated can be found here: 
 [twist-clarification/output/stats.md](twist-clarification/output/stats.md).
+
+## Twist Panel
+
+Quality control analyses and outputs
+for the probes used in the final panel are described here: [twist-panel/readme.md](twist-panel/readme.md)
+
+Outputs can be found here: 
+[twist-panel/output/stats.md](twist-panel/output/stats.md).
+
