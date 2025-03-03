@@ -1,6 +1,6 @@
 # DNA methylation Panel for Lung Cancer Screening 
 
-The panel includes CpG sites known to be associated with factors relevant to lung cancer risk:
+The panel includes about 4000 CpG sites known to be associated with factors relevant to lung cancer risk:
 
 - demographics ([age](age), [ancestry](ancestry), [educational attainment](educational-attainment))
 - exposures (smoking history--[status](smoking-status), [former](smoking-former), [cessation](smoking-cessation), [cotinine](cotinine)--[alcohol consumption](alcohol-consumption), [cadmium](cadmium), [lead](lead))
