@@ -2,13 +2,13 @@
 
 The panel includes CpG sites known to be associated with factors relevant to lung cancer risk:
 
-- demographics (age, sex, ancestry, educational attainment)
-- exposures (smoking history, alcohol consumption, cadmium, lead)
-- aging (Hannum and Dundedin PACE/PoAm clocks)
-- blood cell types
-- cancer risk (lung, breast, colorectal, prostate)
-- cardiovascular disease risk (COPD, HDL cholesterol, BMI)
-- protein abundance (OSM, EN-RAGE, CXCL9, VEGFA, TGFa, IGFBP1, MMP12, HGF, CRP, EGFR, IL6)
+- demographics ([age](age), [ancestry](ancestry), [educational attainment](educational-attainment))
+- exposures (smoking history--[status](smoking-status), [former](smoking-former), [cessation](smoking-cessation), [cotinine](cotinine)--[alcohol consumption](alcohol-consumption), [cadmium](cadmium), [lead](lead))
+- aging ([Hannum](age) and Dunedin [PACE](dunedin-pace)/[PoAm](dunedin-poam38) clocks)
+- [blood cell types](blood-cell-types)
+- cancer risk ([lung](lung-cancer), [breast](breast-cancer), [colorectal](colorectal-cancer), [prostate](prostate))
+- cardiovascular disease risk ([COPD](copd), [HDL cholesterol](hdl), [BMI](bmi))
+- protein abundance ([OSM, EN-RAGE, CXCL9, VEGFA, TGFa, IGFBP1, MMP12, HGF](episcores), [IL6](il6), [EGFR](egfr), [CRP](crp))
 
 ## Dependencies
 
