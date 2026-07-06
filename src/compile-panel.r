@@ -17,38 +17,7 @@ manifest <- load.illumina.manifest(".")
 
 ## sources obtained from Illumina bead chips
 
-illumina.sources <- read.csv(text="id,filename
-age,hannum-model.csv
-alcohol-consumption,dnamalci-sites.csv
-alcohol-consumption,chamberlain-sites.csv
-alcohol-consumption,alc-ewas-sites.csv
-alcohol-consumption,mccartney-sites.csv
-ancestry,output/sites.csv
-bmi,bmi-model.csv
-breast-cancer,xu-sites.csv
-cadmium,cadmium-sites.csv
-copd,important-sites.csv
-cotinine,discovery-sites.csv
-crp,crp-sites.csv
-crp,reduced-hillary-model.csv
-dunedin-pace,pace-model.csv
-dunedin-poam38,dunedinpoam38-sites.csv
-educational-attainment,sites.csv
-egfr,breeze.csv
-egfr,ammous.csv
-episcores,episcore-sites.csv
-hdl,mccartney-sites.csv
-il6,stevenson-sites.csv
-lead,lead-model.csv
-lung-cancer,battram-sites.csv
-lung-cancer,zhao-sites.csv
-prostate-cancer,sites.csv
-prostate-cancer-t-cells,sites.csv
-smoking-cessation,guida-sites.csv
-smoking-cessation,joehanes-sites.csv
-smoking-cessation,mccartney-sites.csv
-smoking-former,andrayas-sites.csv
-smoking-status,maas-sites.csv", stringsAsFactors=F)
+illumina.sources <- as.data.frame(fread("sources.csv"))
 
 ## sources that supply genomic regions
 
@@ -65,7 +34,11 @@ illumina.sites <- lapply(
         filename <- file.path(id, illumina.sources$filename[i])
         cat("loading", filename, "\n")
         dat <- read.csv(filename,stringsAsFactors=F)
-        data.frame(source=id, details=dat$cpg)
+        data.frame(
+			source=id, 
+			pmid=illumina.sources$pmid[i],
+			type=illumina.sources$type[i],
+			details=dat$cpg)
     })
 illumina.sites <- do.call(rbind, illumina.sites)
 
@@ -92,6 +65,8 @@ regions <- lapply(
         dat <- read.csv(filename, stringsAsFactors=F)
         data.frame(
             source=id,
+            pmid=NA,
+            type=NA,
             dat[,c("chr","start","end","details")],
             stringsAsFactors=F)
     })
