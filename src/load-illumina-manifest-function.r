@@ -10,8 +10,8 @@ load.illumina.manifest <- function(path) {
     manifest.450k <- as.data.frame(manifest.450k)
     manifest.450k$chip <- "450k"
 
-    url <- "ftp://webdata2:webdata2@ussd-ftp.illumina.com/downloads/productfiles/methylationEPIC/infinium-methylationepic-v-1-0-b5-manifest-file-csv.zip"
-    filename.zip <- file.path(path, basename(url))
+    url <- "https://webdata.illumina.com/downloads/productfiles/methylationEPIC/infinium-methylationepic-v-1-0-b5-manifest-file-csv.zip"
+	filename.zip <- file.path(path, basename(url))
     if (!file.exists(filename.zip)) 
         download.file(url, destfile=filename.zip)
     filename <- unzip(filename.zip,list=T)$Name[1]
