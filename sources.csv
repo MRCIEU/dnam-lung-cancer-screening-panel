@@ -2,9 +2,9 @@ id,filename,pmid,type
 age,hannum-model.csv,23177740,model
 alcohol-consumption,dnamalci-sites.csv,27843151,model
 alcohol-consumption,chamberlain-sites.csv,36443762,ewas
-alcohol-consumption,alc-ewas-sites.csv,34857913,ewas
+alcohol-consumption,alc-ewas-sites.csv,34857913;31789449,ewas
 alcohol-consumption,mccartney-sites.csv,30257690,model
-ancestry,output/sites.csv,34493871,gwas
+ancestry,output/sites.csv,34493871;26432245,gwas
 bmi,bmi-model.csv,36649705,model
 breast-cancer,xu-sites.csv,23578854,ewas
 cadmium,cadmium-sites.csv,32484362,ewas
