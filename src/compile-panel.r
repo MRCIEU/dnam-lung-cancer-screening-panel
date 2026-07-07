@@ -21,9 +21,9 @@ illumina.sources <- as.data.frame(fread("sources.csv"))
 
 ## sources that supply genomic regions
 
-region.sources <- read.csv(text="id,filename
-blood-cell-types,regions-hg19.csv
-colorectal-cancer,regions-hg19.csv", stringsAsFactors=F)
+region.sources <- read.csv(text="id,filename,pmid,type
+blood-cell-types,regions-hg19.csv,36599988,ewas
+colorectal-cancer,regions-hg19.csv,23988185,model", stringsAsFactors=F)
 
 ## load illumina sources
 
@@ -65,8 +65,8 @@ regions <- lapply(
         dat <- read.csv(filename, stringsAsFactors=F)
         data.frame(
             source=id,
-            pmid=NA,
-            type=NA,
+            pmid=region.sources$pmid[i],
+            type=region.sources$type[i],
             dat[,c("chr","start","end","details")],
             stringsAsFactors=F)
     })
